@@ -1,0 +1,71 @@
+<mat-sidenav-container class="dashboard-container" autosize>
+  <mat-sidenav mode="side" opened>
+    <h2 class="logo">Dashboard</h2>
+    <mat-nav-list>
+      <a mat-list-item>Home</a>
+      <a mat-list-item>Profile</a>
+      <a mat-list-item>Settings</a>
+      <a mat-list-item (click)="logout()">Logout</a>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <mat-toolbar color="primary">
+      <span>Welcome, User</span>
+    </mat-toolbar>
+
+    <div class="main-content">
+      <!-- Button Section -->
+      <div class="button-container">
+        <button mat-raised-button color="accent" (click)="toggleForm()">
+          {{ showForm ? 'Hide' : 'Show' }} Form
+        </button>
+
+        <button mat-raised-button color="primary" (click)="getTasks()">
+          View Tasks
+        </button>
+      </div>
+
+      <!-- Task Form -->
+      <mat-card *ngIf="showForm && !showTaskTable" class="form-card">
+        <form [formGroup]="taskForm" (ngSubmit)="onSubmit()">
+          <mat-form-field class="full-width">
+            <mat-label>Task Title</mat-label>
+            <input matInput formControlName="taskTitle" required />
+          </mat-form-field>
+
+          <mat-form-field class="full-width">
+            <mat-label>Task Description</mat-label>
+            <input matInput formControlName="taskDescription" required />
+          </mat-form-field>
+
+          <button mat-raised-button color="primary" type="submit">
+            Create Task
+          </button>
+        </form>
+      </mat-card>
+
+      <!-- Task Table -->
+      <mat-card *ngIf="taskList.length > 0 && showTaskTable && !showForm" class="task-table-card">
+        <mat-card-title>Task List</mat-card-title>
+        <div class="table-container">
+          <table mat-table [dataSource]="taskList" class="mat-elevation-z2">
+
+            <ng-container matColumnDef="title">
+              <th mat-header-cell *matHeaderCellDef> Title </th>
+              <td mat-cell *matCellDef="let task"> {{task.taskTitle}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="description">
+              <th mat-header-cell *matHeaderCellDef> Description </th>
+              <td mat-cell *matCellDef="let task"> {{task.taskDescription}} </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="['title', 'description']"></tr>
+            <tr mat-row *matRowDef="let row; columns: ['title', 'description']"></tr>
+          </table>
+        </div>
+      </mat-card>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
